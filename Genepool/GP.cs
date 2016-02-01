@@ -101,7 +101,7 @@ namespace Genepool
                     ab = !ab;
             }
 
-            return Mutate(new Individual(c), muteRate);
+            return new Individual(c);
         }
 
         public void SexyTime()
@@ -115,13 +115,12 @@ namespace Genepool
 
         public Individual Mutate(Individual mutee, double magnitude)
         {
-            for (int i = 0; i < mutee.genes.Count; i++)
-            {
-                if (r.NextDouble() < magnitude)
-                {
-                    mutee.genes[i] = (r.NextDouble() * 2) - 1;
-                }
-            }
+            int loci = (int)(r.NextDouble() * mutee.genes.Count);
+
+            mutee.genes[loci] += (r.NextDouble() * magnitude) - (magnitude/2);
+
+            if ((mutee.genes[loci] > 1) || (mutee.genes[loci] < -1))
+                mutee.genes[loci] = ((r.NextDouble()*2) -1);
 
             return mutee;
         }
@@ -130,10 +129,7 @@ namespace Genepool
         {
             for (int i = 0; i < pool.Count; i++)
             {
-                if (r.NextDouble() < magnitude)
-                {
-                    Mutate(pool[i], magnitude);
-                }
+                Mutate(pool[i], magnitude);
             }
         }
 
@@ -155,6 +151,11 @@ namespace Genepool
         public double[] IndividualToDoubles(int i)
         {
             return pool[i].genes.ToArray();
+        }
+
+        public double[] GetBestDoubes()
+        {
+            return pool[indexBest].genes.ToArray();
         }
 
         public void SetIndividualScore(int i, double? score)

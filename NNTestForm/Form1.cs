@@ -17,7 +17,7 @@ namespace NNTestForm
 
         GP pool;
 
-        int poolSize = 1000;
+        int poolSize = 10000;
                 
         double[,] bits = new double[4, 2];
 
@@ -70,6 +70,8 @@ namespace NNTestForm
             }
 
             labelTotalError.Text = totalError.ToString("#.##");
+
+            pool.AddIndividual(new Individual(nn.GetWeights()));
         }
 
         private void buttonReset_Click(object sender, EventArgs e)
@@ -118,6 +120,8 @@ namespace NNTestForm
         private void buttonSexyTime_Click(object sender, EventArgs e)
         {
             pool.SexyTime();
+            pool.SolarFlare(0.01);
+            nn.SetWeights(pool.GetBestDoubes());
         }
     }
 }
